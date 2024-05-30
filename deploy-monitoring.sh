@@ -35,5 +35,5 @@ echo "Deploying Grafana..."
 helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword='admin' --set service.type=NodePort
 
 # Display the services in the monitoring namespace
-echo "Fetching services in the monitoring namespace..."
+echo "Fetching services in the monitoring namespace....."
 kubectl get svc -n $NAMESPACE
