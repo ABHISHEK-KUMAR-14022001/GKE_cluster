@@ -5,7 +5,6 @@ PROJECT_ID="gcp-monitoring-425305"
 CLUSTER_NAME="cluster-name"
 CLUSTER_ZONE="us-central1"
 NAMESPACE="monitoring"
-GRAFANA_ADMIN_PASSWORD="admin"
  
 # Install Helm if not already installed
 if ! command -v helm &> /dev/null; then
@@ -29,33 +28,12 @@ helm repo update
  
 # Deploy Prometheus
 echo "Deploying Prometheus..."
-helm install prometheus prometheus-community/prometheus --namespace $NAMESPACE --set server.service.type=LoadBalancer
+helm install prometheus prometheus-community/prometheus --namespace $NAMESPACE
  
 # Deploy Grafana
 echo "Deploying Grafana..."
-helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword=$GRAFANA_ADMIN_PASSWORD --set service.type=LoadBalancer
+helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword='admin' --set service.type=NodePort
  
-# Wait for services to be up and external IPs to be assigned
-echo "Waiting for Prometheus and Grafana services to be available..."
-sleep 60
- 
-# Get Prometheus and Grafana external IPs
-PROMETHEUS_EXTERNAL_IP=""
-while [ -z "$PROMETHEUS_EXTERNAL_IP" ]; do
-  echo "Waiting for external IP for Prometheus..."
-  PROMETHEUS_EXTERNAL_IP=$(kubectl get svc prometheus-server --namespace $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  [ -z "$PROMETHEUS_EXTERNAL_IP" ] && sleep 10
-done
- 
-GRAFANA_EXTERNAL_IP=""
-while [ -z "$GRAFANA_EXTERNAL_IP" ]; do
-  echo "Waiting for external IP for Grafana..."
-  GRAFANA_EXTERNAL_IP=$(kubectl get svc grafana --namespace $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  [ -z "$GRAFANA_EXTERNAL_IP" ] && sleep 10
-done
- 
-# Display the URLs
-echo "Prometheus is running at: http://$PROMETHEUS_EXTERNAL_IP"
-echo "Grafana is running at: http://$GRAFANA_EXTERNAL_IP (login: admin / $GRAFANA_ADMIN_PASSWORD)"
-
-has context menu
+# Display the services in the monitoring namespace
+echo "Fetching services in the monitoring namespace....."
+kubectl get svc -n $NAMESPACE
