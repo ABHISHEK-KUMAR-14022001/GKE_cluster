@@ -44,8 +44,12 @@ PROMETHEUS_NODE_PORT=$(kubectl get svc prometheus-server --namespace $NAMESPACE 
 GRAFANA_NODE_PORT=$(kubectl get svc grafana --namespace $NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')
  
 # Get the cluster's external IP address
-EXTERNAL_IP=$(kubectl get nodes --namespace $NAMESPACE -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+EXTERNAL_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
  
 # Display the URLs
-echo "Prometheus is running at: http://$EXTERNAL_IP:$PROMETHEUS_NODE_PORT"
-echo "Grafana is running at: http://$EXTERNAL_IP:$GRAFANA_NODE_PORT (login: admin / $GRAFANA_ADMIN_PASSWORD)"
+if [[ -z "$EXTERNAL_IP" ]]; then
+  echo "No external IP found. Please ensure your cluster nodes have external IPs."
+else
+  echo "Prometheus is running at: http://$EXTERNAL_IP:$PROMETHEUS_NODE_PORT"
+  echo "Grafana is running at: http://$EXTERNAL_IP:$GRAFANA_NODE_PORT (login: admin / $GRAFANA_ADMIN_PASSWORD)"
+fi
