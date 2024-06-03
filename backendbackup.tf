@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "devopsbackup2"
+    bucket = "gcp-monitoring-425305"
     prefix = "terraform.tfstate"
   }
 }
