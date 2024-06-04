@@ -34,20 +34,15 @@ helm install prometheus prometheus-community/prometheus --namespace $NAMESPACE -
 echo "Deploying Grafana..."
 helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword='admin' --set service.type=LoadBalancer
 
-# Expose Prometheus and Grafana as LoadBalancer services
-echo "Exposing Prometheus and Grafana services..."
-kubectl expose deployment grafana -n $NAMESPACE --type=LoadBalancer --name=grafana-loadbalancer --port=3000 --target-port=3000
-kubectl expose deployment prometheus-server -n $NAMESPACE --type=LoadBalancer --name=prometheus-loadbalancer --port=9090 --target-port=9090
-
 # Wait for Prometheus and Grafana services to be ready
 echo "Waiting for Prometheus and Grafana services to be ready..."
 kubectl rollout status deployment prometheus-server -n $NAMESPACE
 kubectl rollout status deployment grafana -n $NAMESPACE
 
 # Get the external IP of Prometheus and Grafana services
-PROMETHEUS_EXTERNAL_IP=$(kubectl get svc prometheus-loadbalancer -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-GRAFANA_EXTERNAL_IP=$(kubectl get svc grafana-loadbalancer -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+PROMETHEUS_EXTERNAL_IP=$(kubectl get svc prometheus-server -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+GRAFANA_EXTERNAL_IP=$(kubectl get svc grafana -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # Output Prometheus and Grafana URLs
-echo "Prometheus is accessible at: http://$PROMETHEUS_EXTERNAL_IP:9090"
-echo "Grafana is accessible at: http://$GRAFANA_EXTERNAL_IP:3000"
+echo "Prometheus is accessible at: http://$PROMETHEUS_EXTERNAL_IP"
+echo "Grafana is accessible at: http://$GRAFANA_EXTERNAL_IP"
