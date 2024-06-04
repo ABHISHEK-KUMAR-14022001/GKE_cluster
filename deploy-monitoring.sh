@@ -26,23 +26,14 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
-# Deploy Prometheus as a LoadBalancer service
+# Deploy Prometheus
 echo "Deploying Prometheus..."
-helm install prometheus prometheus-community/prometheus --namespace $NAMESPACE --set server.service.type=LoadBalancer
+helm install prometheus prometheus-community/prometheus --namespace $NAMESPACE
 
-# Deploy Grafana as a LoadBalancer service
+# Deploy Grafana
 echo "Deploying Grafana..."
-helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword='admin' --set service.type=LoadBalancer
+helm install grafana grafana/grafana --namespace $NAMESPACE --set adminPassword='admin' --set service.type=NodePort
 
-# Wait for Prometheus and Grafana services to be ready
-echo "Waiting for Prometheus and Grafana services to be ready..."
-kubectl rollout status deployment prometheus-server -n $NAMESPACE
-kubectl rollout status deployment grafana -n $NAMESPACE
-
-# Get the external IP of Prometheus and Grafana services
-PROMETHEUS_EXTERNAL_IP=$(kubectl get svc prometheus-server -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-GRAFANA_EXTERNAL_IP=$(kubectl get svc grafana -n $NAMESPACE -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
-# Output Prometheus and Grafana URLs
-echo "Prometheus is accessible at: http://$PROMETHEUS_EXTERNAL_IP"
-echo "Grafana is accessible at: http://$GRAFANA_EXTERNAL_IP"
+# Display the services in the monitoring namespace
+echo "Fetching services in the monitoring namespace..."
+kubectl get svc -n $NAMESPACE
