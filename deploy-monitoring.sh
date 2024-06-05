@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PROJECT_ID="gcp-test-425503"
+PROJECT_ID="monitoring-gcp-425505"
 CLUSTER_NAME="cluster-name"
 CLUSTER_ZONE="us-central1"
 NAMESPACE="monitoring"
