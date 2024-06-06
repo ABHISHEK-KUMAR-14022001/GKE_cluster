@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "monitoring-gcp-425505"
+    bucket = "gcp-service-account-key"
     prefix = "terraform.tfstate"
   }
 }
