@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "gcp-service-account-key"
+    bucket = "devops-k8s-project"
     prefix = "terraform.tfstate"
   }
 }
