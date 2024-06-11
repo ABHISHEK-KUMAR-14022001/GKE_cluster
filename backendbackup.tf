@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "devops-k8s-project"
+    bucket = "gcp-cluster-426105"
     prefix = "terraform.tfstate"
   }
 }
