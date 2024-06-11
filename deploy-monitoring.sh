@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PROJECT_ID="devops-k8s-project"
+PROJECT_ID="gcp-cluster-426105"
 CLUSTER_NAME="cluster-name"
 CLUSTER_ZONE="us-central1"
 NAMESPACE="monitoring"
