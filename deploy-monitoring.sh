@@ -2,7 +2,7 @@
 
 # Variables
 PROJECT_ID="devopsgkestandardproject"
-CLUSTER_NAME="cluster-name"
+CLUSTER_NAME=var.cluster_name
 CLUSTER_ZONE="us-central1"
 NAMESPACE="monitoring"
 
