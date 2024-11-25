@@ -1,6 +1,6 @@
 resource "google_container_cluster" "primary" {
   name                        = var.cluster_name
-  location                    = "us-central1"  # Keep this as region
+  location                    = "us-central1-a"  # Keep this as region
   remove_default_node_pool    = true
   initial_node_count          = 1
  
