@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "idp-cluster-tf-file"
+    bucket = "react-idp-app-backup"
     prefix = "terraform.tfstate"
   }
 }
