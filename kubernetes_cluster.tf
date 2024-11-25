@@ -1,11 +1,11 @@
 resource "google_container_cluster" "primary" {
-  name               = var.cluster_name
-  location           = "us-central1-a"
-  remove_default_node_pool = true
-  initial_node_count = 1
+  name                        = var.cluster_name
+  location                    = "us-central1"  # Keep this as region
+  remove_default_node_pool    = true
+  initial_node_count          = 1
 
-  network            = google_compute_network.vpc_network.name
-  subnetwork         = google_compute_subnetwork.subnetwork.name
+  network                     = google_compute_network.vpc_network.name
+  subnetwork                  = google_compute_subnetwork.subnetwork.name
 
   ip_allocation_policy {
     cluster_secondary_range_name  = "pods"
@@ -37,6 +37,7 @@ resource "google_container_node_pool" "primary_nodes" {
   cluster    = google_container_cluster.primary.name
   name       = var.node_pool_name
   node_count = var.node_pool_size
+  location   = "us-central1-a"  # Specify the zone here
 
   node_config {
     preemptible  = false
@@ -51,4 +52,8 @@ resource "google_container_node_pool" "primary_nodes" {
     auto_repair  = true
     auto_upgrade = true
   }
+
+  depends_on = [
+    google_container_cluster.primary  # Ensures node pool creation after cluster is ready
+  ]
 }
