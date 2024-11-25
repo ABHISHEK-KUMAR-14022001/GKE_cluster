@@ -32,9 +32,6 @@ resource "google_container_cluster" "primary" {
     }
   }
 
-  logging = "SYSTEM,WORKLOAD"  # Specify the logging options
-  monitoring = "SYSTEM,STORAGE,POD,DEPLOYMENT,STATEFULSET,DAEMONSET,HPA,CADVISOR,KUBELET"  # Specify the monitoring options
-
   metadata = {
     disable-legacy-endpoints = "true"
   }
