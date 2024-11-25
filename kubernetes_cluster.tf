@@ -43,6 +43,7 @@ resource "google_container_node_pool" "primary_nodes" {
     preemptible  = false
     machine_type = "e2-medium"
     disk_size_gb = 10
+    disk_type    = "pd-standard"
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
